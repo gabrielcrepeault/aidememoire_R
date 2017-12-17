@@ -1,0 +1,166 @@
+---
+title: "Aide-mémoire pour IFT-1902"
+author: "Gabriel Crépeault-Cauchon"
+date: "17 décembre 2017"
+output:
+    pdf_document:
+        toc: TRUE
+        number_sections: TRUE
+        toc_depth: 3
+header-includes:
+    - \usepackage[french]{babel}
+    - \usepackage[T1]{fontenc}
+---
+\newpage
+
+# Introduction
+Section plus qualitative à compléter plus tard
+
+# Terminal
+### Commandes de base
+Voici quelques commandes essentielles à connaître pour naviguer terminal Bash :
+
+> Important : certaines fonctions du _Shell_ demandent un espace, d'autre des tirets.
+
+
+* `cd` pour _change directory_ (nous permet de changer de dossier dans le terminal) ;
+* `pwd` pour savoir le chemin d'accès dans lequel on se trouve en ce moment ;
+* `ls` pour faire apparaître la liste de tous les fichiers dans le dossier actuel ;
+  - `ls -a` fait apparaître **tous les dossiers**, même ceux qui commence par un point (exemple, _.Renviron_) ;
+* `touch` Créer un fichier de texte brut ;
+* `rm`permet
+* `mkdir` Créer un dossier dans le répertoire où l'on se trouve ;
+* `rmdir` Supprimer un dossier dans le répertoire où l'on se trouve ;
+* `mv <nomfichier> <destination>`: dépalacer un fichier
+
+### Utiliser Git sur le terminal
+#### Configuration
+À la première utilisation de git via le terminal _Bash_ il faut configurer quelques informations :
+
+* `git config --global user.name "<Nom>"` Configurer son nom tel qu'on désire qu'il apparaisse sur Git.
+* `git config --global user.email "<courriel>"` Configurer l'adresse courriel associée.
+* `git config --global core.editor open` Si vous oubliez de préciser une description lors d'un _commit_ (sera vu à la prochaine section), il va simplement ouvrir un fichier texte brut.
+* `git config --list` Juste pour valider que les informations entrées ci-dessus sont enregistrées adéquatement.
+
+
+#### Collaborer sur un projet
+Pour faire le suivi des versions d'un projet informatique, il est utile d'utiliser Git. Voici un résumé des fonctions (du terminal) à savoir utiliser :
+
+* `git init` : Créer un répertoire (_repository_) _Git_ Dans le dossier actuel. _Astuce_ : il est plus simple de créer son _repository_ directement sur [Github](https://github.com/) puis le cloner dans le dossier désiré ;
+* `git clone <https://...>` _Cloner_ (ou si on préfère, télécharger) un répertoire Git dans le dossier actuel. **Attention**, on va cloner une seule fois un répertoire, car par la suite on va _pull_ les modifications du dépôt ;
+* `git pull` commandes qu'on utilise seulement si on a déjà cloné le répertoire. Nous permet d'avoir les mises à jour ;
+* `git status` permet de voir si il y a des fichiers dans notre dossier qui n'apparaissent pas (ou que les modifications n'apparaissent pas) sur le répertoire Git. Si c'est le cas, elles seront affichés en __rouge__.
+* `git add` pour ajouter les modifications dans le dépôt. Après cette étape, on doit confirmer nos modifications par la commande _commit_
+* `git commit -m "<description de la modif.>"` On confirme notre modification au travail et on décrit *très brièvement* ce qu'on a fait comme modification
+* `git push` _pousser_ au serveur les modifications qu'on a fait. Après cette étape, si on va sur Github, nos modifications apparaîtront.
+
+
+# Programmation en R
+
+
+## Commandes et expressions de R
+
+### Commandes de base
+
+* `save image()` Si on veut sauvegarder l'espace de travail et son environnement. **Rarement utilisée**, sauf si on veut sauvegarder la valeur d'une variable (qui est longue à obtenir)
+* `getwd()` obtenir le répertoire de travail dans lequel on se trouve actuellement
+* `setwd(<chemin d'accès>)` Changer le répertoire de travail actuel
+* `help()` obtenir de l'aide sur une fonction ou une commande en particulier. On peut aussi accéder au manuel d'instruction de R avec `help.start`
+* `ls()` : voir tous les objets de l'environnement global
+* `rm()` : pour supprimer un objets
+  - `rm(list = ls())` : supprimer tous les objets dans l'environnement global
+
+
+### Opérateurs de R
+|Opérateur    | Fonction|
+|---          |---      |
+|`$`    |extraction d'une liste   |
+|`[]`   |indiçage   |
+|`^`   |puissance   |
+|`-`   |changement de signe   |
+|`:`   |génération d'une suite   |
+|`%*%` `%%` `%/%`   |produit matriciel, modulo, division entière   |
+|`*` `/`   |multiplication, division   |
+|`+` `-`   |addition, soustraction   |
+|`<` `<=` `==` `>=` `>` `!=`   |plus petit, plus petit ou égal, égal, plus grand ou égal, plus grand, différent de   |
+|`!`   |négation logique   |
+|`&`   |ET logique   |
+|`|`   |OU logique   |
+|` <- `    | affectation (méthode la plus utilisée)   |
+
+### Création d'une suite ou séquence
+Séquence de chiffres
+```{r, exec=TRUE,echo=TRUE}
+seq(from = 10, to = 20, by = 2)
+x <- c(1,2,3,8)
+seq(x)
+seq_len(5)
+y <- c(10,14,3,2)
+seq_along(y)
+```
+Échantillon de données aléatoire
+```{r, exec=TRUE,echo=TRUE}
+x <- sample(1:5, size = 8, replace = TRUE, prob = c(0.1,0.2,0.2,0.25,0.25)) ; x
+```
+Séquence de lettres
+```{r, exec=TRUE, echo=TRUE}
+x <- c(1,2,3)
+letters[x]
+x <- c(24,25,26)
+LETTERS[x]
+```
+
+### Information sur un objet de R
+* `mode()` : Mode d'un objet
+* `length()` : Longueur d'un objet
+* `nchar()` : nombre de caractères
+* `class()` : classe d'un objet
+* `summary()` : beaucoup d'information sur l'objet
+
+## Objets de R
+### Mode d'un objet
+|Mode          | Contenu de l'objet   |
+|---            |---      |
+| `numeric`     | nombres réels  |
+|`complex`      |nombres complexes   |
+|`logical`   |valeurs booléennes   |
+|`character`   |chaînes de carctères  |
+|`function`   |fonction   |
+|`list`   |liste   |
+|`expression`   |expressions non évaluées   |
+
+Si on créé un vecteur qui contient des données de plus d'un mode, il va convertir les autres données dans le mode le plus «puissant», en respectant l'ordre suivant :
+
+1. `list`
+2. `character`
+3. `numeric`
+4. `logical`
+
+```{r, exec=TRUE, echo=TRUE}
+a <- c(TRUE, "test",1:2,list(1)) ; a
+mode(a)
+b <- c(FALSE,0:2,"test") ; b
+mode(b)
+c <- c(FALSE,1:2) ; c
+mode(c)
+```
+
+```{r, exec=TRUE, echo=TRUE}
+x <- c(TRUE,1,4,"GAB")
+class(x)
+mode(x)
+```
+### NA, NaN, NULL et Inf
+```{r, exec=TRUE,echo=TRUE}
+0/0
+Inf/Inf
+Inf-Inf
+```
+```{r, exec=TRUE,echo=TRUE}
+1/0
+Inf
+Inf^Inf
+```
+```{r, exec=TRUE,echo=TRUE}
+5 + NULL
+```
