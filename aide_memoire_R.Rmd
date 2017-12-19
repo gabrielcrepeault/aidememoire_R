@@ -17,7 +17,7 @@ header-includes:
 Section plus qualitative à compléter plus tard
 
 # Terminal
-### Commandes de base
+## Commandes de base
 Voici quelques commandes essentielles à connaître pour naviguer terminal Bash :
 
 > Important : certaines fonctions du _Shell_ demandent un espace, d'autre des tirets.
@@ -33,8 +33,36 @@ Voici quelques commandes essentielles à connaître pour naviguer terminal Bash 
 * `rmdir` Supprimer un dossier dans le répertoire où l'on se trouve ;
 * `mv <nomfichier> <destination>`: dépalacer un fichier
 
-### Utiliser Git sur le terminal
-#### Configuration
+## Fonctions utiles du terminal et les Regex
+### Expressions régulières (_Regex_)
+Voici un aide-mémoire sur les expressions régulières
+
+|Expression   | définition| Exemples|
+|:-----|:------------------:|----------------:|
+|`*`   |Cherche 1 ou plusieurs occurences du caractère précédent   |`ga*` va trouver ga, g et gaaaa   |
+|`?`   |Cherche 1 ou 0 occurences du caractère précédent   |`ga` va trouver ga et g, mais pas gaaaa   |
+|`+`   |Cherche 1 ou plusieurs du caractère précédent   |`ga+` va trouver   |
+|\   |Quand on cherche un caractère spécial (utilisé dans les _Regex_)   |`Hungry\?` va trouver Hungry?    |
+|`.`   |Cherche n'importe quel caractères   | `ga.` va trouver gab, garage, gabon, etc.  |
+|`( )`   |cherche une chaîne de caractères   |   |
+|`[ ]`   |cherche parmi une liste de caractères   |`[gb]ateaux` va trouver gateaux et bateaux   |
+|`|`   |Va chercher la chaîne de caractères avant ou après le symbole   |`(lun)|(mar)di` va trouver lundi et mardi   |
+|`{ }`   |Spécifie le nombre (consécutif) d'occurence|   |
+|`^`   |le caractère doit se trouver au début de la ligne   |`^http` nous permet de trouver des URL   |
+|`$`   |le caractère doit terminer la ligne   |`(.com)$` nous permet de trouver les adresses internet se terminant par .com   |
+
+### `grep`
+
+
+### `awk`
+```{bash, exec=TRUE,echo=TRUE}
+awk -F "," '{print $1 " " $5}' IAG.TO.csv
+```
+
+
+
+## Utiliser Git sur le terminal
+### Configuration
 À la première utilisation de git via le terminal _Bash_ il faut configurer quelques informations :
 
 * `git config --global user.name "<Nom>"` Configurer son nom tel qu'on désire qu'il apparaisse sur Git.
@@ -43,7 +71,7 @@ Voici quelques commandes essentielles à connaître pour naviguer terminal Bash 
 * `git config --list` Juste pour valider que les informations entrées ci-dessus sont enregistrées adéquatement.
 
 
-#### Collaborer sur un projet
+### Collaborer sur un projet
 Pour faire le suivi des versions d'un projet informatique, il est utile d'utiliser Git. Voici un résumé des fonctions (du terminal) à savoir utiliser :
 
 * `git init` : Créer un répertoire (_repository_) _Git_ Dans le dossier actuel. _Astuce_ : il est plus simple de créer son _repository_ directement sur [Github](https://github.com/) puis le cloner dans le dossier désiré ;
@@ -72,21 +100,22 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 
 
 ### Opérateurs de R
-|Opérateur    | Fonction|
-|---          |---      |
-|`$`    |extraction d'une liste   |
-|`[]`   |indiçage   |
-|`^`   |puissance   |
-|`-`   |changement de signe   |
-|`:`   |génération d'une suite   |
-|`%*%` `%%` `%/%`   |produit matriciel, modulo, division entière   |
-|`*` `/`   |multiplication, division   |
-|`+` `-`   |addition, soustraction   |
-|`<` `<=` `==` `>=` `>` `!=`   |plus petit, plus petit ou égal, égal, plus grand ou égal, plus grand, différent de   |
-|`!`   |négation logique   |
-|`&`   |ET logique   |
-|`|`   |OU logique   |
-|` <- `    | affectation (méthode la plus utilisée)   |
+
+|Opérateur                      | Fonction|
+|:----------------    |-----------------:      |
+|`$`                            |extraction d'une liste   |
+|`[]`                           |indiçage   |
+|`^`                            |puissance   |
+|`-`                            |changement de signe   |
+|`:`                            |génération d'une suite   |
+|`%*%` `%%` `%/%`               |produit matriciel, modulo, division entière   |
+|`*` `/`                        |multiplication, division   |
+|`+` `-`                        |addition, soustraction   |
+|`<` `<=` `==` `>=` `>` `!=`    |plus petit, plus petit ou égal, égal, plus grand ou égal, plus grand, différent de   |
+|`!`                            |négation logique   |
+|`&`                            |ET logique   |
+|`|`                            |OU logique   |
+|` <- `                         | affectation (méthode la plus utilisée)   |
 
 ### Création d'une suite ou séquence
 Séquence de chiffres
@@ -116,6 +145,7 @@ LETTERS[x]
 * `nchar()` : nombre de caractères
 * `class()` : classe d'un objet
 * `summary()` : beaucoup d'information sur l'objet
+
 
 ## Objets de R
 ### Mode d'un objet
@@ -164,3 +194,36 @@ Inf^Inf
 ```{r, exec=TRUE,echo=TRUE}
 5 + NULL
 ```
+
+## Vecteurs
+### Création d'un Vecteur
+```{r, exec=TRUE, echo=TRUE}
+x <- c(1,2,3) ; x
+y <- vector(mode = "numeric", length = 5) ; y
+```
+
+### Ajout d'étiquettes au vecteur
+il existe 2 façon :
+```{r, exec=TRUE, echo=TRUE}
+x <- c(1,2)
+names(x) <- c("a","b") ; x
+```
+ou bien
+```{r, exec=TRUE, echo=TRUE}
+x <- c(a=1, b=2) ; x
+```
+
+### Indiçage du vecteur
+```{r, exec=TRUE, echo=TRUE}
+x <- c(A = 1, B = 2, C = 3, D = 4, E = TRUE, G = NA) ; x
+x[3]
+x[c(1,5)]
+x[-3]
+x[-c(3,4)]
+x[!is.na(x)]
+x[x<4]
+x[c("G","B")]
+x[]
+```
+
+### Opérations sur les vecteurs
