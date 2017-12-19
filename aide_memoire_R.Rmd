@@ -217,14 +217,54 @@ x <- c(a=1, b=2) ; x
 ### Indiçage du vecteur
 ```{r, exec=TRUE, echo=TRUE}
 x <- c(A = 1, B = 2, C = 3, D = 4, E = TRUE, G = NA) ; x
-x[3]
-x[c(1,5)]
-x[-3]
-x[-c(3,4)]
-x[!is.na(x)]
-x[x<4]
-x[c("G","B")]
-x[]
+x[3]            # 3e élément
+x[c(1,5)]       # 1er et 5e élément
+x[-3]           # tout sauf le 3e élément
+x[-c(3,4)]      # tous sauf le 3e et 4e élément
+x[!is.na(x)]    # tout ce qui n'est pas NA
+x[x<4]          # tous les éléments qui sont <4
+x[c("G","B")]   # seulement les éléments taggé "G" et "B"
+x[]             # tous les éléments
 ```
 
 ### Opérations sur les vecteurs
+
+
+## Fonctions
+
+### Quelques fonctions déjà programmées dans R
+
+#### Statistiques
+Il existe plusieurs fonctions déjà installées pour des calculs statistiques simples : 
+```{r, echo=TRUE, exec=TRUE}
+x <- sample(1:20, 10, replace=T)
+y <- sample(1:30, 10, replace = T)
+sum(x)
+mean(x)
+var(x)
+cov(x,y)
+```
+Lorsqu'on a un vecteur ou une matrice, on peut utiliser des fonctions qui font certains calculs par ligne ou par colonne : 
+```{r, exec=TRUE, echo=TRUE}
+tableau <- matrix(1:6, nrow = 3, ncol = 2, byrow = T)
+rowSums(tableau)
+rowMeans(tableau)
+colSums(tableau)
+colMeans(tableau)
+```
+
+
+### Fonctions d'applications
+Lorsqu'on travaille avec des _data frame_ ou bien des tableaux dans R, on est mieux d'utiliser des fonctions d'applications (plutôt que des boucles qui ralentissent le temps d'éxécution d'une fonction).
+
+* le premier argument est la vecteur ou le tableau sur lequel on veut _appliquer_ la fonction
+* le 2e argument est la dimension (1 = ligne, 2= colonne, etc.) sur laquelle on veut appliquer itérativement la fonction
+* La fonction désirée sur chaque ligne ou colonne est donnée en 3e argument
+* si la fonction a besoin de plusieurs arguments de spécifiés, on peut les spécifier par la suite en 4e, 5e argument etc...
+
+**Exemples**
+```{r, echo=TRUE, exec=TRUE}
+apply(tableau, 1, sum)    # fait la somme des lignes
+apply(tableau, 2, mean)    # idem pour colonne  
+```
+
