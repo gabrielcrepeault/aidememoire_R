@@ -1,0 +1,29 @@
+Ceci est un fichier de pratique pour les Expressions régulières
+
+numéro de téléphone :
+418-555-1234,Gabriel
+416-567-2356,Isabelle
+423-645-4234,William
+324-645-1231,René
+435-345-5143,Stephen
+
+
+
+Prix d'action séparés par des espace
+17-12-2017 10.08
+16-12-2017 10.06
+15-12-2017 10.04
+14-12-2017 10.00
+13-12-2017 9.00
+12-12-2017 16.00
+11-12-2017 20.00
+10-12-2017 19.00
+9-12-2017 18.00
+
+
+les crochets nous permettent de détecter certains patterns :
+a     apparait 1 fois
+aa    apparait 2 fois
+aaa   apparait 3 fois
+aaaa  apparait 4 fois
+aaaaa apparait 5 fois

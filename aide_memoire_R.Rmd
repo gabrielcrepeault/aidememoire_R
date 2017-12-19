@@ -79,6 +79,7 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 * `git pull` commandes qu'on utilise seulement si on a déjà cloné le répertoire. Nous permet d'avoir les mises à jour ;
 * `git status` permet de voir si il y a des fichiers dans notre dossier qui n'apparaissent pas (ou que les modifications n'apparaissent pas) sur le répertoire Git. Si c'est le cas, elles seront affichés en __rouge__.
 * `git add` pour ajouter les modifications dans le dépôt. Après cette étape, on doit confirmer nos modifications par la commande _commit_
+    - Si on utilise `git add -A`, tous les fichiers seront ajoutés au prochain _commit_
 * `git commit -m "<description de la modif.>"` On confirme notre modification au travail et on décrit *très brièvement* ce qu'on a fait comme modification
 * `git push` _pousser_ au serveur les modifications qu'on a fait. Après cette étape, si on va sur Github, nos modifications apparaîtront.
 
