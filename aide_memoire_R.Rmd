@@ -230,6 +230,43 @@ x[]             # tous les éléments
 ### Opérations sur les vecteurs
 
 
+
+## Matrices
+### Création d'une matrice
+On peut créer une matrice avec la fonction `matrix` : 
+
+```{r, exec=TRUE, echo=TRUE}
+x <- (matrix(1:10, nrow = 2, ncol = 5, byrow = T))
+```
+L'option _byrow_ est pour que la matrice se remplisse par ligne.
+
+### informations supplémentaires sur notre matrice
+```{r, exec=TRUE, echo=TRUE}
+attributes(x)
+nrow(x)         # nombre de lignes
+ncol(x)         # nombre de colonnes
+```
+
+
+
+
+### Indiçage d'une matrice
+Comme un vecteur, on peut indicer une matrice.
+```{r, exec=TRUE, echo=TRUE}
+x[1]            # 1er élément
+x[1,2]          # 1ère ligne, 2e colonne
+x[2,]           # toute la 2e ligne
+x[,1]           # toute la 1ère colonne
+x[c(1,2),2]     # les 2 premiers éléments de la première colonne
+```
+
+### Opérations sur des matrices
+```{r, exec=TRUE, echo=TRUE}
+y <- matrix()
+
+```
+
+
 ## Fonctions
 
 ### Quelques fonctions déjà programmées dans R
@@ -239,10 +276,10 @@ Il existe plusieurs fonctions déjà installées pour des calculs statistiques s
 ```{r, echo=TRUE, exec=TRUE}
 x <- sample(1:20, 10, replace=T)
 y <- sample(1:30, 10, replace = T)
-sum(x)
-mean(x)
-var(x)
-cov(x,y)
+sum(x)      # Somme d'un vecteur
+mean(x)     # Moyenne
+var(x)      # Variance
+cov(x,y)    # Covariance (nécessite de mettre 2 vecteurs en argument)
 ```
 Lorsqu'on a un vecteur ou une matrice, on peut utiliser des fonctions qui font certains calculs par ligne ou par colonne : 
 ```{r, exec=TRUE, echo=TRUE}
