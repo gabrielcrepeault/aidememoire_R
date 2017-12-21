@@ -1,12 +1,12 @@
 ---
 title: "Aide-mémoire pour IFT-1902"
 author: "Gabriel Crépeault-Cauchon"
-date: "17 décembre 2017"
+date: \today
 output:
     pdf_document:
         toc: TRUE
         number_sections: TRUE
-        toc_depth: 3
+        toc_depth: 4
 header-includes:
     - \usepackage[french]{babel}
     - \usepackage[T1]{fontenc}
@@ -15,6 +15,8 @@ header-includes:
 
 # Introduction
 Section plus qualitative à compléter plus tard
+
+
 
 
 # Terminal
@@ -33,8 +35,12 @@ Voici quelques commandes essentielles à connaître pour naviguer terminal Bash 
 * `mkdir` Créer un dossier dans le répertoire où l'on se trouve ;
 * `rmdir` Supprimer un dossier dans le répertoire où l'on se trouve ;
 * `mv <nomfichier> <destination>`: dépalacer un fichier
+* `nano <nomfichier>` : éditeur de texte intégré à Bash pour modifier un fichier de texte brut (pas très convial, mais permet de faire rapidement des petites modifications).
+    - Pour sortir de l'éditeur _nano_, on fait `Ctrl+X`
+
 
 ## Fonctions utiles du terminal et les Regex
+
 ### Expressions régulières (_Regex_)
 Voici un aide-mémoire sur les expressions régulières
 
@@ -59,6 +65,7 @@ Voici un aide-mémoire sur les expressions régulières
 ```{bash, exec=TRUE,echo=TRUE}
 awk -F "," '{print $1 " " $5}' IAG.TO.csv
 ```
+
 
 
 
@@ -88,6 +95,7 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 
 
 # Programmation en R
+
 
 ## Commandes et expressions de R
 
@@ -209,7 +217,10 @@ Inf^Inf
 ```
 
 
+
+
 ## Vecteurs
+
 ### Création d'un Vecteur
 ```{r, exec=TRUE, echo=TRUE}
 (x <- c(1,2,3))
@@ -241,9 +252,6 @@ x[]             # tous les éléments
 ```
 
 ### Opérations sur les vecteurs
-
-
-
 
 
 ## Matrices
@@ -289,6 +297,7 @@ cbind(x,5)              # ajout d'une colonne à la matrice
 
 
 
+
 ## Listes
 ### Construction d'une liste
 ```{r, exec=TRUE, echo=TRUE}
@@ -311,6 +320,8 @@ sondage[[c(1,2)]]   # 2e élément du 1er élément de la liste
 ### Défaire une liste
 On peut _défaire_ une liste avec `unlist`. La conversion se fait vers le mode le plus puissant.
 
+
+
 ## Data frame
 ### construire un Data frame
 Avec la fonction `dataframe`, on peut faire quelque
@@ -318,15 +329,40 @@ Avec la fonction `dataframe`, on peut faire quelque
 (form <- data.frame(prenom = c("Suzie","Mario","Jean"),
            nom = c("Tremblay","Gagnon","Cote"),
            age = c(12,13,14),
-           fumeur = c(T,T,F)))
+           fumeur = c(T,T,F),
+           salaire = c(40000,45000,135000)))
 ```
 
 
 ### fonction subset
 La fonction `subset` permet d'extraire de l'information dans le data frame en appliquant un filtre.
 ```{r, exec=TRUE, echo=TRUE}
-subset(form, fumeur = T, select = age)
+subset(form, salaire >42000, select = age)
 ```
+
+
+
+## Importation et exportation de données
+### Exportation
+
+```{r}
+# Pour la fonction cat, on peut ajouter plusieurs objets de R dans la concaténation
+cat(num,"Ceci est un commentaire", file = "sondage.data")
+# La fonction write n'accepte qu'un seul objet (ou matrice)
+write(tableau, file = "sondage.data", ncolumns = 5)
+# spécifiquement pour exporter en .csv (virgule)
+write.csv(tableau,file = "sondage.csv")
+# encore en .csv (mais séparé par des points-virgules)
+write.csv2(char, file = "caracteres.csv2")
+```
+
+### Importation
+```{r}
+scan("sondage.data")    # pour importer des données
+read.table(file = "IAG.TO.csv",header = T, sep = ",")
+read.csv(file = "IAG.TO.csv")   # Comprends par défaut qu'il y a un titre
+```
+On aurait pu aussi utiliser `read.csv2()` si on a un jeu de données où les champs sont séparés par des points virgules.
 
 
 ## Fonctions
@@ -368,6 +404,11 @@ is.vector(y)        # est-ce que c'est un vecteur?
 
 
 
+#### Manipulation de données
+Triage de données : malgré le fait qu'on a bâti en cours des algorithmes (voir section plus loin), il est beaucoup plus efficace d'utiliser la fonction `sort()` déjà conçue de R.
+
+
+
 ### Fonctions d'applications
 Lorsqu'on travaille avec des _data frame_ ou bien des tableaux dans R, on est mieux d'utiliser des fonctions d'applications (plutôt que des boucles qui ralentissent le temps d'éxécution d'une fonction).
 
@@ -381,4 +422,221 @@ Lorsqu'on travaille avec des _data frame_ ou bien des tableaux dans R, on est mi
 apply(tableau, 1, sum)    # fait la somme des lignes
 apply(tableau, 2, mean)    # idem pour colonne  
 ```
+
+
+### Algorithmes
+
+#### Algorithme de tri
+##### Insertionsort
+$$
+runtime = O(N^2)
+$$
+```{r}
+insertionsort <- function(x)
+{
+  xlen <- length(x)
+  for(i in seq_len(xlen))
+  {
+      for (j in seq_len(i-1))
+      {
+        if (x[j] > x[i])
+        x <- c(x[seq_len(j-1)],
+                 x[i],x[j],
+                 x[j + seq_len(i-j-1)],
+                 x[i + seq_len(xlen-i)])
+      }
+      
+  }
+  x
+}
+```
+
+##### Selectionsort
+$$
+runtime = O(N^2)
+$$
+```{r}
+selectionsort <- function(x)
+{
+  xlen <- length(x)      # sert souvent
+  for (i in seq_len(xlen))
+  {
+    ## recherche de la position de la plus petite valeur
+    ## parmi x[i], ..., x[xlen]
+    i.min <- i
+    for (j in i:xlen)
+    {
+      if (x[j] <x[i.min])
+        i.min <- j
+      ## à mesure que i augmente, j ne considère pas 
+      ## les première position, puisqu'elles sont déjà triées
+    }
+    ## échange de x[i] et x[i.min]
+    x[c(i, i.min)] <- x[c(i.min, i)]
+  }
+  x
+}
+```
+
+##### Bubblesort
+$$
+runtime = O(N^2)
+$$
+```{r}
+bubblesort <- function(x)
+{
+    ind <- 2:length(x)     # suite sert souvent
+
+    not_sorted <- TRUE     # entrer dans la boucle
+    while (not_sorted)
+    {
+        not_sorted <- FALSE
+        for (i in ind)
+        {
+            j <- i - 1
+            if (x[i] < x[j])
+            {
+                x[c(i, j)] <- x[c(j, i)]
+                not_sorted <- TRUE
+                next
+            }
+        }
+    }
+    x
+}
+```
+
+##### Countingsort
+$$
+runtime = O(N+M)
+$$
+```{r}
+countingsort <- function(x, min, max)
+{
+    min1m <- min - 1               # sert souvent
+    counts <- numeric(max - min1m) # initialisation
+
+    for (i in seq_along(x))
+    {
+        j <- x[i] - min1m
+        counts[j] <- counts[j] + 1
+    }
+
+    ## suite des nombres de 'min' à 'max' répétés chacun le
+    ## bon nombre de fois
+    rep(min:max, counts)
+}
+```
+
+
+
+##### Bucketsort
+On place nos données dans des paniers (_buckets_), puis on les place en ordre. Ensuite on remets nos _buckets_ dans le bon ordre.
+$$
+runtime = O(N+M)
+$$
+```{r}
+bucketsort <- function(data, nbuckets)
+{
+  # Création des buckets
+  max = max(data)
+  bucket  <- vector(mode = "list", length = nbuckets)
+  etendue <- max/nbuckets 
+  
+  # distribution des données dans les buckets
+  for (i in seq_along(data))  # on veut la longueur de data
+  {
+    j <- ceiling(data[i]/etendue) # pour sélectionner le bon
+    bucket[[j]] <- c(bucket[[j]],data[i])
+  }
+  
+  # tri des différents buckets
+  for (i in seq_len(nbuckets))  # on veut le chiffre de la variable
+  {
+    if (!is.null(bucket[[i]]))  # is pas NULL, on le trie! 
+    bucket[[i]] <- sort(bucket[[i]])
+  }
+  
+  # On défait" la liste pour avoir nos données triées
+  unlist(bucket)
+}
+```
+
+
+
+#### Algorithme de recherche
+
+##### Linear Search
+Cet algorithme va seulement fonctionner si les données sont triées.
+$$
+runtime = O(N)
+$$
+```{r}
+linearsearch <- function(x,target)
+{
+  for (i in seq_along(x))
+  {
+    if  (x[i] == target)
+        return(i)     # retourne la position de l'élément recherché
+    if (x[i] > target)
+        return("la valeur n'est pas dans le vecteur")
+  }
+  NA
+}
+```
+
+##### Binary Search
+$$
+runtime = O(\log(N))
+$$
+Principe de l'algorithme : on fixe une valeur au millieu. si la valeur recherchée est plus grande, on vient d'éliminer la moitié des données. La recherche va se faire dans la partie supérieure.
+```{r}
+binary_search <- function(x, target)
+{
+  min = 1         
+  max = length(x)
+  
+  while (min <= max)
+  {
+    mid = floor((max + min)/2)    # choisir floor/ceiling arbitraire
+    if (target < x[mid])
+      max <- mid - 1
+    else if (target > x[mid])
+      min <- mid + 1
+    else return(mid)
+  }  
+  NA      # la valeur qu'on cherche n'est pas dans le vecteur!
+}
+```
+
+
+##### Interpolation search
+va faire un _guess_ sur l'endroit approximatif de la valeur, considérant que les données sont triées. Ensuite, il va interpoler dans le bon sens pour se rapprocher (de façon itérative) de la bonne valeur.
+$$
+runtime = O(\log(\log(N)))
+$$
+```{r}
+interpolation_search <- function(x, target)
+{
+  min <-  1
+  max <-  length(x)
+  while (min <= max)
+  {
+    mid <- min + floor((max - min)*
+      (target - x[min]) / (x[max] - x[min]))
+    if (target < x[mid]) 
+      max <- mid - 1
+    else if (target > x[mid])
+      min <- mid  + 1
+    else 
+      return(mid)
+  }
+  "La valeur cherchée n'est pas dans le vecteur"
+}
+```
+
+
+
+
+
 
