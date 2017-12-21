@@ -90,8 +90,13 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
     - Si on utilise `git add -A`, tous les fichiers seront ajoutés au prochain _commit_
 * `git commit -m "<description de la modif.>"` On confirme notre modification au travail et on décrit *très brièvement* ce qu'on a fait comme modification
 * `git push` _pousser_ au serveur les modifications qu'on a fait. Après cette étape, si on va sur Github, nos modifications apparaîtront.
-* `git log --oneline --decorate` : permet de voir les dernières modifications qu'il y a eu sur le projet **et Git nous indique dans quelle branche du dépôt on se trouve*
+* `git log --oneline --decorate` : permet de voir les dernières modifications qu'il y a eu sur le projet **et Git nous indique dans quelle branche du dépôt on se trouve**
+* `git branch` : identifie toutes les branches existantes pour le projet en cours
+    * `git branch <nom_nouvelle_branche` : créer une nouvelle branche indépendante
+    * `git branch -d {nom_branche_à_supprimer>` : supprimer une branche qu'on n'a plus de besoin
+    * ``git branch --no-merged` : visualiser les branches dans lesquelles il y a des modifications qui n'ont pas encore été _merged_.
 * `git checkout <nom_de_la_branche>` : pour se déplacer d'une branche à l'autre.
+* `git merge <nom_branche>` : faire un _merge_ entre la branche master et la branche indépendante pour fusionner les modifications.
 
 
 
