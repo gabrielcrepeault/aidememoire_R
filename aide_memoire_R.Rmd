@@ -90,6 +90,8 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
     - Si on utilise `git add -A`, tous les fichiers seront ajoutés au prochain _commit_
 * `git commit -m "<description de la modif.>"` On confirme notre modification au travail et on décrit *très brièvement* ce qu'on a fait comme modification
 * `git push` _pousser_ au serveur les modifications qu'on a fait. Après cette étape, si on va sur Github, nos modifications apparaîtront.
+* `git log --oneline --decorate` : permet de voir les dernières modifications qu'il y a eu sur le projet **et Git nous indique dans quelle branche du dépôt on se trouve*
+* `git checkout <nom_de_la_branche>` : pour se déplacer d'une branche à l'autre.
 
 
 
@@ -127,29 +129,6 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 |`&`                            |ET logique   |
 |`|`                            |OU logique   |
 |` <- `                         | affectation (méthode la plus utilisée)   |
-
-### Création d'une suite ou séquence
-Séquence de chiffres
-```{r, exec=TRUE,echo=TRUE}
-seq(from = 10, to = 20, by = 2)
-x <- c(1,2,3,8)
-seq(x)
-seq_len(5)
-y <- c(10,14,3,2)
-seq_along(y)
-```
-Échantillon de données aléatoire
-```{r, exec=TRUE,echo=TRUE}
-x <- sample(1:5, size = 8, replace = TRUE, prob = c(0.1,0.2,0.2,0.25,0.25)) ; x
-```
-Séquence de lettres
-```{r, exec=TRUE, echo=TRUE}
-x <- c(1,2,3)
-letters[x]
-x <- c(24,25,26)
-LETTERS[x]
-```
-
 
 
 ## Objets de R
@@ -259,9 +238,14 @@ x[]             # tous les éléments
 On peut créer une matrice avec la fonction `matrix` : 
 
 ```{r, exec=TRUE, echo=TRUE}
-x <- (matrix(1:10, nrow = 2, ncol = 5, byrow = T))
+x <- (matrix(5:8, nrow = 2, ncol = 2, byrow = T))
 ```
 L'option _byrow_ est pour que la matrice se remplisse par ligne.
+```{r}
+diag(2)         # Créé une matrice identité p*p
+diag(c(5,4))    # matrice carrée avec le vecteur en argument
+```
+
 
 ### informations supplémentaires sur notre matrice
 ```{r, exec=TRUE, echo=TRUE}
@@ -271,11 +255,11 @@ ncol(x)         # nombre de colonnes
 ```
 
 ### Tableau
+C'est comme une matrice, mais à plus de 2 dimensions. Le deuxième argument devient alors un vecteur d'au moins 3 dimensions.
 ```{r, exec=TRUE, echo=TRUE}
 (tableau <- array(1:30, dim =c(2,5,3)))
 ?array
 ```
-
 
 
 
@@ -290,12 +274,25 @@ x[c(1,2),2]     # les 2 premiers éléments de la première colonne
 ```
 
 ### Opérations sur des matrices
+
+#### Concaténation de matrices
 ```{r, exec=TRUE, echo=TRUE}
 rbind(x,x[1,]*x[2,])    # ajout de ligne à la matrice
 cbind(x,5)              # ajout d'une colonne à la matrice
 ```
-
-
+#### Mathématiques / Statistiques
+Lorsqu'on a un vecteur ou une matrice, on peut utiliser des fonctions qui font certains calculs par ligne ou par colonne :
+```{r, exec=TRUE, echo=TRUE}
+(tableau <- matrix(1:9, nrow = 3, ncol = 3, byrow = T))
+rowSums(tableau)    # somme de chaque ligne
+colSums(tableau)    # somme de chaque colonne
+rowMeans(tableau)   # moyenne de chaque ligne
+colMeans(tableau)   # moyenne de chaque colonne
+det(tableau)        # calcul le déterminant
+t(x)                # pour avoir la matrice transposée
+solve(x)            # nous donne la matrice inverse de x
+solve(x, c(1,2))    # pour des équations linéaires ...
+```
 
 
 ## Listes
@@ -342,6 +339,7 @@ subset(form, salaire >42000, select = age)
 
 
 
+
 ## Importation et exportation de données
 ### Exportation
 
@@ -365,30 +363,116 @@ read.csv(file = "IAG.TO.csv")   # Comprends par défaut qu'il y a un titre
 On aurait pu aussi utiliser `read.csv2()` si on a un jeu de données où les champs sont séparés par des points virgules.
 
 
-## Fonctions
+## Fonctions internes de R
+Les fonctions présentées ci-dessous sont livrées de base dans R.
 
-### Quelques fonctions déjà programmées dans R
-#### Statistiques
+### Création de données
+#### Séquence
+```{r, exec=TRUE,echo=TRUE}
+seq(from = 10, to = 20, by = 2)
+x <- c(1,2,3,8)
+seq(x)
+seq_len(5)
+y <- c(10,14,3,2)
+seq_along(y)
+```
+#### Répétition
+```{r, exec=TRUE, echo=TRUE}
+rep(1:2, each = 5)
+rep(1:2, times = 5) # remarquez la différence avec 'each'
+rep.int(1:3,7)      # Respecte le nombre de répétitions désirées
+rep_len(1:3,10)     # Arrête le vecteur à une certaine longueur
+# (même si ça ne respecte pas la longueur du vecteur)
+```
+
+#### Simulation d'un échantillon
+Note : si le nombre de résultats possibles est différent de la taille de l'échantillon, l'option `replace=TRUE` doit être activée (tirage avec remplacement)
+```{r, exec=TRUE,echo=TRUE}
+x <- sample(1:5, size = 8, replace = TRUE, prob = c(0.1,0.2,0.2,0.25,0.25)) ; x
+```
+#### Séquence de lettres
+```{r, exec=TRUE, echo=TRUE}
+x <- c(1,2,3)
+letters[x]          # en minuscule
+x <- c(24,25,26)
+LETTERS[x]          # EN MAJUSCULE
+```
+
+
+### Triage de données
+```{r, exec=TRUE, echo=TRUE}
+sort(c(-4,0,5,2,60,1), decreasing = F)      # trie les données
+rank(c(-4,0,5,2,60,1))      # donne le rang croissant/décroissant
+rev(1:5)        # créé un vecteur renversé
+unique(c(1,1,1,2,4,5,6,6,6))        # renvoie une seule fois chaque éléments du vecteur
+```
+
+
+
+
+### Recherche et position
+Lorsqu'on recherche un élément en particulier dans un vecteur ou qu'on veut filtrer l'information : 
+```{r, exec=TRUE, echo=TRUE}
+which(x<8)      # position des éléments dans le vecteur qui respecte la condition
+which.min(x)    # position du minimum
+which.max(x)    # position du maximum
+match(19,x)     # cherche le premier argument dans x
+-1:3 %in% x     # Valide si -1,0,1,2 ou 3 est présent dans le vecteur x (booléen)
+```
+### Tests logiques
+```{r, exec=TRUE, echo=TRUE}
+any(x > 5)    # est-ce qu'il y a un élément de x > 5 ?   
+all(x > 7)    # est-ce que TOUS les éléments sont plus grands que 7 ?
+```
+### Arrondir une valeur
+```{r, exec=TRUE, echo=TRUE}
+(precise <- c(1.445346, 3.345345435, 4.4346345, 78.345363, -6.780597345))
+round(precise)      # arrondi à l'entier près
+round(precise, 3)   # on précise qu'on veut 3 décimales
+floor(precise)      # arrondi à l'entier inférieur
+ceiling(precise)    # arrondi à l'entier supérieur
+trunc(precise)      # on enlève les décimales (sans arrondir, différent de floor pour les négatifs)
+```
+
+
+
+### Statistiques
 Il existe plusieurs fonctions déjà installées pour des calculs statistiques simples : 
 ```{r, echo=TRUE, exec=TRUE}
-x <- sample(1:20, 10, replace=T)
-y <- sample(1:30, 10, replace = T)
-sum(x)      # Somme d'un vecteur
-mean(x)     # Moyenne
-var(x)      # Variance
-cov(x,y)    # Covariance (nécessite de mettre 2 vecteurs en argument)
+(echant_x <- sample(1:20, 10, replace=T))
+(echant_y <- sample(1:30, 10, replace = T))
+sum(echant_x)           # Somme d'un vecteur
+prod(echant_x)          # produit de tous les éléments d'un vecteur
+mean(echant_x)          # Moyenne
+var(echant_x)           # Variance
+cov(echant_x,echant_y)  # Covariance (nécessite de mettre 2 vecteurs en argument)
+min(echant_x)           # minimum
+max(echant_x)           # maximum
+median(echant_x)        # médiane
+quantile(echant_x)      # quantile
+diff(echant_x)          # delta (variation) entre chaque éléments
+range(echant_x)         # étendue
+summary(echant_x)       # résumé des principales mesures statistiques
 ```
-Lorsqu'on a un vecteur ou une matrice, on peut utiliser des fonctions qui font certains calculs par ligne ou par colonne : 
+Il est parfois pratique de connaître les résultats cummulatifs : 
 ```{r, exec=TRUE, echo=TRUE}
-tableau <- matrix(1:6, nrow = 3, ncol = 2, byrow = T)
-rowSums(tableau)
-rowMeans(tableau)
-colSums(tableau)
-colMeans(tableau)
+cumsum(echant_y)        # somme cumulative
+cumprod(echant_y)       # produit cumulatif
+cummin(echant_y)        # minimum cumulatif
+cummax(echant_y)        # maximum cumulatif
+pmin(echant_y, 12)      # minimum entre : valeur en argument et l'élément du vecteur
+pmax(echant_y, 9)       # maximum entre : valeur en argument et l'élément du vecteur
+```
+### Extraction d'information
+```{r}
+head(echant_x, n = 4)       # on extrait les n premiers éléments de l'objet
+head(echant_x, n = -4)      # l'objet R mais sans les 4 derniers éléments
+tail(echant_x, n = 3)       # on extrait les n derniers éléments de l'objet
+tail(echant_x, n = -2)      # l'objet $ mais sans les 2 premiers éléments
 ```
 
 
-#### les fonctions "is.blablabla"
+### les fonctions "is.blablabla"
 Il y a plusieurs fonctions dans R qui permettent d'obtenir une réponse booléenne **vrai** ou **faux** en validant une information.
 ```{r, exec=TRUE, echo=TRUE}
 is.matrix(y)        # une liste n'est pas une matrice
@@ -403,9 +487,6 @@ is.vector(y)        # est-ce que c'est un vecteur?
 
 
 
-
-#### Manipulation de données
-Triage de données : malgré le fait qu'on a bâti en cours des algorithmes (voir section plus loin), il est beaucoup plus efficace d'utiliser la fonction `sort()` déjà conçue de R.
 
 
 
