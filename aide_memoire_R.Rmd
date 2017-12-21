@@ -16,6 +16,7 @@ header-includes:
 # Introduction
 Section plus qualitative à compléter plus tard
 
+
 # Terminal
 ## Commandes de base
 Voici quelques commandes essentielles à connaître pour naviguer terminal Bash :
@@ -84,8 +85,9 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 * `git push` _pousser_ au serveur les modifications qu'on a fait. Après cette étape, si on va sur Github, nos modifications apparaîtront.
 
 
-# Programmation en R
 
+
+# Programmation en R
 
 ## Commandes et expressions de R
 
@@ -140,6 +142,10 @@ x <- c(24,25,26)
 LETTERS[x]
 ```
 
+
+
+## Objets de R
+
 ### Information sur un objet de R
 * `mode()` : Mode d'un objet
 * `length()` : Longueur d'un objet
@@ -148,7 +154,6 @@ LETTERS[x]
 * `summary()` : beaucoup d'information sur l'objet
 
 
-## Objets de R
 ### Mode d'un objet
 |Mode          | Contenu de l'objet   |
 |---            |---      |
@@ -159,6 +164,13 @@ LETTERS[x]
 |`function`   |fonction   |
 |`list`   |liste   |
 |`expression`   |expressions non évaluées   |
+
+```{r, exec=TRUE, echo=TRUE}
+char <- c("a","b","c")
+mode(char)
+num <- c(1:5)
+mode(num)
+```
 
 Si on créé un vecteur qui contient des données de plus d'un mode, il va convertir les autres données dans le mode le plus «puissant», en respectant l'ordre suivant :
 
@@ -196,11 +208,12 @@ Inf^Inf
 5 + NULL
 ```
 
+
 ## Vecteurs
 ### Création d'un Vecteur
 ```{r, exec=TRUE, echo=TRUE}
-x <- c(1,2,3) ; x
-y <- vector(mode = "numeric", length = 5) ; y
+(x <- c(1,2,3))
+(y <- vector(mode = "numeric", length = 5))
 ```
 
 ### Ajout d'étiquettes au vecteur
@@ -231,6 +244,8 @@ x[]             # tous les éléments
 
 
 
+
+
 ## Matrices
 ### Création d'une matrice
 On peut créer une matrice avec la fonction `matrix` : 
@@ -245,6 +260,12 @@ L'option _byrow_ est pour que la matrice se remplisse par ligne.
 attributes(x)
 nrow(x)         # nombre de lignes
 ncol(x)         # nombre de colonnes
+```
+
+### Tableau
+```{r, exec=TRUE, echo=TRUE}
+(tableau <- array(1:30, dim =c(2,5,3)))
+?array
 ```
 
 
@@ -262,15 +283,55 @@ x[c(1,2),2]     # les 2 premiers éléments de la première colonne
 
 ### Opérations sur des matrices
 ```{r, exec=TRUE, echo=TRUE}
-y <- matrix()
+rbind(x,x[1,]*x[2,])    # ajout de ligne à la matrice
+cbind(x,5)              # ajout d'une colonne à la matrice
+```
 
+
+
+## Listes
+### Construction d'une liste
+```{r, exec=TRUE, echo=TRUE}
+(sondage <- list(nom = c("Justin","William","Charlie"),
+          age = c(35,23,14),
+          job = c("Politicien","Menuisier","Etudiant"),
+          citoyen = c(T,T,F)))
+```
+
+### Indiçage d'une liste
+```{r, exec=TRUE, echo=TRUE}
+sondage[2]          # 2e élément de la liste
+sondage$age         # idem
+# pour pouvoir travailler avec les données, il faut faire un double indiçage : 
+mean(sondage[2])
+mean(sondage[[2]])
+sondage[[c(1,2)]]   # 2e élément du 1er élément de la liste
+```
+
+### Défaire une liste
+On peut _défaire_ une liste avec `unlist`. La conversion se fait vers le mode le plus puissant.
+
+## Data frame
+### construire un Data frame
+Avec la fonction `dataframe`, on peut faire quelque
+```{r}
+(form <- data.frame(prenom = c("Suzie","Mario","Jean"),
+           nom = c("Tremblay","Gagnon","Cote"),
+           age = c(12,13,14),
+           fumeur = c(T,T,F)))
+```
+
+
+### fonction subset
+La fonction `subset` permet d'extraire de l'information dans le data frame en appliquant un filtre.
+```{r, exec=TRUE, echo=TRUE}
+subset(form, fumeur = T, select = age)
 ```
 
 
 ## Fonctions
 
 ### Quelques fonctions déjà programmées dans R
-
 #### Statistiques
 Il existe plusieurs fonctions déjà installées pour des calculs statistiques simples : 
 ```{r, echo=TRUE, exec=TRUE}
@@ -289,6 +350,22 @@ rowMeans(tableau)
 colSums(tableau)
 colMeans(tableau)
 ```
+
+
+#### les fonctions "is.blablabla"
+Il y a plusieurs fonctions dans R qui permettent d'obtenir une réponse booléenne **vrai** ou **faux** en validant une information.
+```{r, exec=TRUE, echo=TRUE}
+is.matrix(y)        # une liste n'est pas une matrice
+is.array(y)         # comme on voit, une matrice est aussi un tableau
+is.function(y)      # Est-ce que l'argument est une fonction?
+is.character(char)  # de mode "character"?    
+is.numeric(num)     # de mode "numeric"?
+is.vector(y)        # est-ce que c'est un vecteur?
+```
+
+
+
+
 
 
 ### Fonctions d'applications
