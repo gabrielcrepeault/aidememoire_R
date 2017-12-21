@@ -38,6 +38,9 @@ Voici quelques commandes essentielles à connaître pour naviguer terminal Bash 
 * `nano <nomfichier>` : éditeur de texte intégré à Bash pour modifier un fichier de texte brut (pas très convial, mais permet de faire rapidement des petites modifications).
     - Pour sortir de l'éditeur _nano_, on fait `Ctrl+X`
 
+** Astuce ** : Si on fait `Ctrl+c`, on peut sortir du mode où le terminal nous demande de compléter une commande avec le symbole `>`   
+    
+
 
 ## Fonctions utiles du terminal et les Regex
 
@@ -49,7 +52,7 @@ Voici un aide-mémoire sur les expressions régulières
 |`*`   |Cherche 1 ou plusieurs occurences du caractère précédent   |`ga*` va trouver ga, g et gaaaa   |
 |`?`   |Cherche 1 ou 0 occurences du caractère précédent   |`ga` va trouver ga et g, mais pas gaaaa   |
 |`+`   |Cherche 1 ou plusieurs du caractère précédent   |`ga+` va trouver   |
-|\   |Quand on cherche un caractère spécial (utilisé dans les _Regex_)   |`Hungry\?` va trouver Hungry?    |
+|`\`   |Quand on cherche un caractère spécial (utilisé dans les _Regex_)   |`Hungry\?` va trouver Hungry?    |
 |`.`   |Cherche n'importe quel caractères   | `ga.` va trouver gab, garage, gabon, etc.  |
 |`( )`   |cherche une chaîne de caractères   |   |
 |`[ ]`   |cherche parmi une liste de caractères   |`[gb]ateaux` va trouver gateaux et bateaux   |
@@ -59,11 +62,30 @@ Voici un aide-mémoire sur les expressions régulières
 |`$`   |le caractère doit terminer la ligne   |`(.com)$` nous permet de trouver les adresses internet se terminant par .com   |
 
 ### `grep`
+C'est une fonction qui permet de faire une recherche selon certains caractères dans un fichier de texte brut. Si une ligne contient le premier argument, `grep` nous renvoiera la ligne au complet contenant l'expression (et non seulement l'expression).
+
+* l'option `-E` sert à faire appel aux expressions régulières étendues, alors on n'a pas à spécifier le _backslah_ devant les brackets ou les paranthèses ([]).
+* Le deuxième argument constitue ce qu'on recherche (qui peut s'automatiser sous forme d'expressions régulières)
+* Le dernier argument est le fichier de texte brut dans lequel on recherche l'information
+```{bash, exec=TRUE, echo=TRUE}
+grep -E [0-9]{3}-[0-9]{3}-[0-9]{4} fichier_pratique.txt 
+```
+
+
+
+### `sed`
+Fonction qui permet de chercher et remplacer une chaîne de caractères.
+
+* l'option `s` : on va remplacer l'argument après le premier / par l'argument du deuxième /
+* l'option `g` : _global_, ne s'arrête pas à la première occurence, va passer au travers de tout le document
+```{bash, exec=TRUE, echo=TRUE}
+sed "s/Mary/Joe/g" poem.txt
+```
 
 
 ### `awk`
 ```{bash, exec=TRUE,echo=TRUE}
-awk -F "," '{print $1 " " $5}' IAG.TO.csv
+awk -F "," '{print $1 " "$2 " " $5}' IAG.TO.csv
 ```
 
 
@@ -101,11 +123,11 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 
 
 
+
 # Programmation en R
 
 
 ## Commandes et expressions de R
-
 ### Commandes de base
 
 * `save image()` Si on veut sauvegarder l'espace de travail et son environnement. **Rarement utilisée**, sauf si on veut sauvegarder la valeur d'une variable (qui est longue à obtenir)
@@ -136,8 +158,8 @@ Pour faire le suivi des versions d'un projet informatique, il est utile d'utilis
 |` <- `                         | affectation (méthode la plus utilisée)   |
 
 
-## Objets de R
 
+## Objets de R
 ### Information sur un objet de R
 * `mode()` : Mode d'un objet
 * `length()` : Longueur d'un objet
@@ -203,8 +225,8 @@ Inf^Inf
 
 
 
-## Vecteurs
 
+## Vecteurs
 ### Création d'un Vecteur
 ```{r, exec=TRUE, echo=TRUE}
 (x <- c(1,2,3))
@@ -236,7 +258,6 @@ x[]             # tous les éléments
 ```
 
 ### Opérations sur les vecteurs
-
 
 ## Matrices
 ### Création d'une matrice
@@ -300,6 +321,7 @@ solve(x, c(1,2))    # pour des équations linéaires ...
 ```
 
 
+
 ## Listes
 ### Construction d'une liste
 ```{r, exec=TRUE, echo=TRUE}
@@ -324,6 +346,7 @@ On peut _défaire_ une liste avec `unlist`. La conversion se fait vers le mode l
 
 
 
+
 ## Data frame
 ### construire un Data frame
 Avec la fonction `dataframe`, on peut faire quelque
@@ -341,6 +364,7 @@ La fonction `subset` permet d'extraire de l'information dans le data frame en ap
 ```{r, exec=TRUE, echo=TRUE}
 subset(form, salaire >42000, select = age)
 ```
+
 
 
 
@@ -366,6 +390,7 @@ read.table(file = "IAG.TO.csv",header = T, sep = ",")
 read.csv(file = "IAG.TO.csv")   # Comprends par défaut qu'il y a un titre
 ```
 On aurait pu aussi utiliser `read.csv2()` si on a un jeu de données où les champs sont séparés par des points virgules.
+
 
 
 ## Fonctions internes de R
@@ -468,6 +493,18 @@ cummax(echant_y)        # maximum cumulatif
 pmin(echant_y, 12)      # minimum entre : valeur en argument et l'élément du vecteur
 pmax(echant_y, 9)       # maximum entre : valeur en argument et l'élément du vecteur
 ```
+### Mathématiques
+```{r, exec=TRUE, echo=TRUE}
+exp(1)          # e^(1)
+log(exp(1))     # log(x, base = exp(1) par défaut)
+```
+
+
+
+
+
+
+
 ### Extraction d'information
 ```{r}
 head(echant_x, n = 4)       # on extrait les n premiers éléments de l'objet
@@ -477,7 +514,7 @@ tail(echant_x, n = -2)      # l'objet $ mais sans les 2 premiers éléments
 ```
 
 
-### les fonctions "is.blablabla"
+### Les fonctions "is.blablabla"
 Il y a plusieurs fonctions dans R qui permettent d'obtenir une réponse booléenne **vrai** ou **faux** en validant une information.
 ```{r, exec=TRUE, echo=TRUE}
 is.matrix(y)        # une liste n'est pas une matrice
@@ -488,6 +525,9 @@ is.numeric(num)     # de mode "numeric"?
 is.vector(y)        # est-ce que c'est un vecteur?
 ```
 
+```{r}
+
+```
 
 
 

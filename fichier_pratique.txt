@@ -1,11 +1,11 @@
 Ceci est un fichier de pratique pour les Expressions régulières
 
 numéro de téléphone :
-418-555-1234,Gabriel
-416-567-2356,Isabelle
-423-645-4234,William
-324-645-1231,René
-435-345-5143,Stephen
+418-555-1234, Gabriel
+416-567-2356, Nathaly
+423-645-4234, William
+324-645-1231, Ronald
+435-345-5143, Donald
 
 
 
@@ -27,3 +27,11 @@ aa    apparait 2 fois
 aaa   apparait 3 fois
 aaaa  apparait 4 fois
 aaaaa apparait 5 fois
+
+
+
+Du texte à remplacer : avec la fonction `sed` du terminal, on va pouvoir remplacer 'il' par 'elle'
+Lebron James est un joueur professionnel de basket-ball.
+Il a commencé à jouer dans la NBA très jeune.
+Il est américain et pèse plus de 200 lbs.
+
