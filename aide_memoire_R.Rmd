@@ -91,6 +91,7 @@ awk -F "," '{print $1 " "$2 " " $5}' IAG.TO.csv
 
 
 
+
 ## Utiliser Git sur le terminal
 ### Configuration
 À la première utilisation de git via le terminal _Bash_ il faut configurer quelques informations :
@@ -763,6 +764,64 @@ interpolation_search <- function(x, target)
 
 
 
+
+
+
+
+
+## Structure de contrôle
+### Éxécution conditionnelle
+```{r, exec=TRUE, echo=TRUE}
+x
+if (any(x > 25)) print("Certains nombres sont plus grands que 25")
+if (all(x < 27)) print("tous les nombres sont plus petits que 27")
+ifelse(x>25, x+10, x-2) # SI(condition, si vrai, si faux)
+{                       # fait exactement la même chose (sur plusieurs lignes)
+    if (x > 25)
+        x+10
+    else
+        x-2
+}
+# Switch évalue le premier argument et retourne le résultat de l'argument correspondant
+switch(log(exp(2)),"c'est la veille de Noël", "c'est Noël",5)
+switch(1+1+1, "c'est la veille de Noël", "c'est Noël",5)
+```
+### Boucles itératives
+**boucle For** : on effectue la boucle pour un nombre pré-défini de fois (sauf s'il y a présence d'un test d'arrêt, tel que `break`).
+```{r}
+{
+    for (i in 1:3)
+    {
+        if (x[i] > 27)
+            break
+        x <- x + 2
+    }
+    x           # important, pour faire afficher le résultat dans la console
+}
+```
+On peut aussi sauter certaines itérations (en combinant avec une éxécution conditionnelle) avec la commande `next`.
+
+**boucle While** : tant que la condition est valide, la boucle continue, sauf s'il y a un test d'arrêt (`break`)
+```{r}
+# un calendrier de l'avent sur 24 jours
+avent <- function(date)
+{
+    while(date < 24)    # Boucles itératives pour chaque jours restants
+    {
+        print(paste("Il reste", 25-date, "jours avant Noël!"))
+        date <- date + 1
+    }
+}
+avent(21)   # le jour de l'examen final IFT-1902 ...
+
+```
+
+** Boucle Repeat ** : c'est l'équivalent des boucles _dowhile_ ou _dountil_ de d'autres language de programmation. Ici, on va juste combiner `repeat` avec le test d'arrêt (`stop`,`break`,`return`)
+
+### Tests d'arrêt
+
+|test       |Ce qui se passe|
+|-----------|---------------|
 
 
 
