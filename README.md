@@ -1,2 +1,2 @@
 # aidememoire_R
-Summary document on R programmation, learned in an informatic class at Université Laval 
+Summary document on R programming language, learned in an informatic class at Université Laval 
